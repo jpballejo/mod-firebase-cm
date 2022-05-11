@@ -5,11 +5,18 @@
   "main": "index.js",
   "scripts": {
     "start": "index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "build": "microbundle"
   },
   "author": "jpballejo",
   "license": "MIT",
   "dependencies": {
     "firebase-admin": "^10.0.2"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.11",
+    "babel-jest": "^27.5.1",
+    "jest": "^27.5.1",
+    "microbundle": "^0.14.2"
   }
 }
