@@ -4,7 +4,7 @@ admin.initializeApp({
   credential: admin.credential.cert(process.env.GOOGLE_APPLICATION_CREDENTIALS),
 });
 
-const sendMessageToDevice = (deviceToken, data) => {
+const sendMessageToDevice = (deviceToken, data, callback) => {
   const message = {
     notification: data.notification,
     data: { data: JSON.stringify(data.data) },
@@ -14,15 +14,22 @@ const sendMessageToDevice = (deviceToken, data) => {
     .messaging()
     .send(message)
     .then((response) => {
-      return "Send message ";
+      if (callback) {
+        return callback(true, response);
+      } else {
+        return "Send message to device success";
+      }
     })
     .catch((error) => {
-      console.log("Error sending message to device:", error);
-      return error;
+      if (callback) {
+        return callback(false, error);
+      } else {
+        return "Send message to device failed " + error;
+      }
     });
 };
 
-const sendMessageToAllDevices = (tokensDevices, data) => {
+const sendMessageToAllDevices = (tokensDevices, data, callback) => {
   const message = {
     notification: data.notification,
     data: { data: JSON.stringify(data.data) },
@@ -42,15 +49,22 @@ const sendMessageToAllDevices = (tokensDevices, data) => {
         });
         console.log("List of tokens that caused failures: " + failedTokens);
       }
-      return "Send all messages ";
+      if (callback) {
+        return callback(true, response);
+      } else {
+        return "Send message to all devices success";
+      }
     })
     .catch((error) => {
-      console.log("Error sending multicast message:", error);
-      return error;
+      if (callback) {
+        return callback(false, error);
+      } else {
+        return "Send message to all devices failed " + error;
+      }
     });
 };
 
-const sendMessageToTopic = (topic, data) => {
+const sendMessageToTopic = (topic, data, callback) => {
   const message = {
     notification: data.notification,
     data: { data: JSON.stringify(data.data) },
@@ -61,11 +75,18 @@ const sendMessageToTopic = (topic, data) => {
     .messaging()
     .send(message)
     .then((response) => {
-      return "Send message to topic" + topic;
+      if (callback) {
+        return callback(true, response);
+      } else {
+        return "Send message to topic success";
+      }
     })
     .catch((error) => {
-      console.log("Error sending message:", error);
-      return error;
+      if (callback) {
+        return callback(false, error);
+      } else {
+        return "Send message to topic failed " + error;
+      }
     });
 };
 
